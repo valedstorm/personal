@@ -2,10 +2,10 @@
   "name": "personal",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "main": "dist-electron/index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "dev": "chcp 65001 && vite",
+    "build": "vue-tsc && vite build && electron-builder",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -13,8 +13,47 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
+    "electron": "^29.3.0",
+    "electron-builder": "^24.13.3",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
+    "vite-plugin-electron": "^0.28.4",
+    "vite-plugin-electron-renderer": "^0.14.5",
     "vue-tsc": "^2.0.6"
+  },
+  "build": {
+    "appId": "com.kanban.app",
+    "productName": "kanban",
+    "directories": {
+      "output": "release/${version}"
+    },
+    "files": [
+      "dist",
+      "dist-electron"
+    ],
+    
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "artifactName": "${productName}-Linux-${version}.${ext}"
+    }
   }
 }
